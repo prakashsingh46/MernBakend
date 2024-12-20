@@ -67,11 +67,8 @@ employeeSchema.methods.generateJwtToken= async function(){
 employeeSchema.pre("save", async function(next){
     //during updation if password is also changed then only  hash it again
     if(this.isModified("password")){
-        // console.log("current pass ",this.password);
         this.password=await bcrypt.hash(this.password, 10);
-        // console.log("current password",this.password);
-
-        this.confirmpassword=undefined; // dont need to store
+        this.confirmpassword=await bcrypt.hash(this.password, 10);
     }
 
     next(); //to execute next commant i.e. save 
